@@ -1,3 +1,49 @@
 body {
-    background-color:lightblue; /* lightsteelblue ||  powderblue || lightblue*/
+    background-color:lightblue; 
+    font-size: 17px;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; 
+}
+
+h1, h2{
+    background-color: #DCDCDC;
+    color: #3D3D3B;
+    text-align: center;
+    font-size: 35px;
+    border-style: outset;
+    border-width: thick;
+    margin: 35px 25px;
+    padding: 10px;
+}
+
+input[type=text]{
+    border-radius: 12px;
+    transition: width 1s ease-in-out;
+}
+
+input[type=text]:focus {
+  width: 40%;
+}
+
+button{ 
+    background-color: #DCDCDC;
+    padding: 7px 20px;
+    border-radius: 12px;
+    border-style: outset;
+    border-width: thick;
+    font-size: 15px;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; 
+}
+
+select {
+    width: 10rem;
+    background-color: #DCDCDC;
+    border: #3D3D3B 2px solid;
+}
+select>option {
+    background-color: #dcdcdc8a;
+}
+
+ul {
+    list-style-position: outside;
+  list-style-image: url('subdots.png');
 }

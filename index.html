@@ -15,7 +15,7 @@
         <label for="title">Problem:</label>
         <input type="text" id="title" name="title">
 
-        <p>Priority:</p>
+        <p>Priority:
 
         <label>
             <input type="radio" name="priority" value="high">
@@ -31,10 +31,12 @@
             <input type="radio" name="priority" value="low">
             Low
         </label>
+        </p>
 
         <button type="submit">Add Ticket</button>
     </form>
-
+    
+    <br><br>
     <label for="statusFilter">Filter by status:</label>
     <select id="statusFilter">
         <option value="all">All</option>
@@ -50,6 +52,8 @@
 
     <label for="ticketId">Ticket ID:</label>
     <input type="text" id="ticketId">
+    <br>
+    <br>
 
     <label for="newStatus">New status:</label>
     <select id="newStatus">
@@ -57,13 +61,15 @@
         <option value="doing">Doing</option>
         <option value="done">Done</option>
     </select>
+    <br>
+    <br>
 
     <button id="changeStatus" type="button"> 
         Change Status
     </button>
-
+    <br><br>
     <p id="message"></p>
-
+   
     <h2>Tickets</h2>
     <ul id="ticketList">
     </ul>
