@@ -5,8 +5,10 @@ const tickets = [];
 document.getElementById("ticketForm").addEventListener("submit", function(event) {
     event.preventDefault();
     addTicket();
-    readTicketData();
+    filter();
 });
+
+document.getElementById("statusFilter").addEventListener("change", filter);
 
 function dataSanitization(id, title, status, priority){
     title=title.trim();
@@ -76,4 +78,46 @@ function readTicketData()
         
         lista.appendChild(li1);
     }
+}
+
+function filter()
+{
+    const value_filter = document.getElementById("statusFilter").value;
+    const list = document.getElementById("ticketList");
+
+    list.innerHTML = "";
+
+    let visibleCount = 0;
+
+    for(let i = 0; i < tickets.length; i++)
+    {
+        if(value_filter === "all" || tickets[i].status === value_filter)
+        {
+            let li = document.createElement("li");
+
+            let p1 = document.createElement("p");
+            p1.textContent = "Id: " + tickets[i].id;
+
+            let p2 = document.createElement("p");
+            p2.textContent = "Title: " + tickets[i].title;
+
+            let p3 = document.createElement("p");
+            p3.textContent = "Status: " + tickets[i].status;
+
+            let p4 = document.createElement("p");
+            p4.textContent = "Priority: " + tickets[i].priority;
+
+            li.appendChild(p1);
+            li.appendChild(p2);
+            li.appendChild(p3);
+            li.appendChild(p4);
+
+            list.appendChild(li);
+
+            visibleCount++;
+        }
+    }
+
+    document.getElementById("visibleCount").textContent = visibleCount;
+    document.getElementById("totalCount").textContent = tickets.length;
 }
