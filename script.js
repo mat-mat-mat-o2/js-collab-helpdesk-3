@@ -1,5 +1,4 @@
-let ticketCounter=0;
-
+let ticketCounter = 1;
 const tickets = [];
 
 document.getElementById("ticketForm").addEventListener("submit", function(event) {
@@ -10,78 +9,86 @@ document.getElementById("ticketForm").addEventListener("submit", function(event)
 
 document.getElementById("statusFilter").addEventListener("change", filter);
 
-function dataSanitization(id, title, status, priority){
-    title=title.trim();
-    if(id===null || id>10**99){
-        return false;
-    } else if(title.length<3 || title.length>80){
-        document.getElementById("message").textContent = "Tytuł musi mieć przynajmniej 3 litery";
-        return false;
-    } else if(status!=='new' && status!=='doing' && status!=='done'){
-        return false;
-    } else if(priority!=='low' && priority!=='normal' && priority!=='high'){
+function createTicketRow(ticket) {
+    const li = document.createElement("li");
+
+    const p1 = document.createElement("p");
+    p1.textContent = "Id: " + ticket.id;
+
+    const p2 = document.createElement("p");
+    p2.textContent = "Title: " + ticket.title;
+
+    const p3 = document.createElement("p");
+    p3.textContent = "Status: " + ticket.status;
+
+    const p4 = document.createElement("p");
+    p4.textContent = "Priority: " + ticket.priority;
+
+    li.appendChild(p1);
+    li.appendChild(p2);
+    li.appendChild(p3);
+    li.appendChild(p4);
+
+    return li;
+}
+
+function dataSanitization(id, title, status, priority) {
+    const messageEl = document.getElementById("message");
+    
+    if (tickets.length >= 1000) {
+        if (messageEl) messageEl.textContent = "Osiągnięto maksymalny limit 1000 zgłoszeń.";
         return false;
     }
-    
+
+    if (!id || typeof id !== "string" || id.trim().length === 0 || id.length > 100) {
+        if (messageEl) messageEl.textContent = "Nieprawidłowe ID zgłoszenia.";
+        return false;
+    }
+
+    const trimmedTitle = title ? title.trim() : "";
+    if (trimmedTitle.length < 3 || trimmedTitle.length > 80) {
+        if (messageEl) messageEl.textContent = "Tytuł musi mieć od 3 do 80 znaków po przycięciu spacji.";
+        return false;
+    }
+
+    if (status !== 'new' && status !== 'doing' && status !== 'done') {
+        if (messageEl) messageEl.textContent = "Nieprawidłowy status.";
+        return false;
+    }
+
+    if (priority !== 'low' && priority !== 'normal' && priority !== 'high') {
+        if (messageEl) messageEl.textContent = "Nieprawidłowy priorytet.";
+        return false;
+    }
+
+    if (messageEl) messageEl.textContent = "";
     return true;
 }
 
-function addTicket()
-{
+function addTicket() {
     const form = document.getElementById('ticketForm');
     const formData = new FormData(form);
 
-    formData.append('status', 'new');
-    formData.set('id', ticketCounter);
+    const rawTitle = formData.get('title') || "";
+    const cleanTitle = rawTitle.trim();
+    const priority = formData.get('priority') || "normal";
+    const status = 'new';
+    const id = String(ticketCounter);
 
-    if(dataSanitization(formData.get('id'), formData.get('title'), formData.get('status'), formData.get('priority'))){
+    if (dataSanitization(id, cleanTitle, status, priority)) {
+        tickets.push({
+            id: id,
+            title: cleanTitle,
+            status: status,
+            priority: priority
+        });
+
         ticketCounter += 1;
-        tickets.push({id: formData.get('id'), title: formData.get('title'), status: formData.get('status'), priority: formData.get('priority')});
-    }
-    
-}
-
-function readTicketData()
-{
-    const lista=document.getElementById("ticketList");
-
-    while(lista.firstChild)
-    {
-        lista.removeChild(lista.firstChild);
-    }
-
-    for(var i=0; i<tickets.length; i++)
-    {
-        var div1 = document.createElement("div");
-        var li1 = document.createElement("li");
-        var para1 = document.createElement("p");
-        var node1 = document.createTextNode("Id: "+tickets[i].id);
-        var para2 = document.createElement("p");
-        var node2 = document.createTextNode("Title: "+tickets[i].title);
-        var para3 = document.createElement("p");
-        var node3 = document.createTextNode("Status: "+tickets[i].status);
-        var para4 = document.createElement("p");
-        var node4 = document.createTextNode("Priority: "+tickets[i].priority);
-
-        para1.appendChild(node1);
-        para2.appendChild(node2);
-        para3.appendChild(node3);
-        para4.appendChild(node4);
-
-        div1.appendChild(para1);
-        div1.appendChild(para2);
-        div1.appendChild(para3);
-        div1.appendChild(para4);
-
-        li1.appendChild(div1);
-
-        
-        lista.appendChild(li1);
+        form.reset();
     }
 }
 
-function filter()
-{
+function filter() {
     const value_filter = document.getElementById("statusFilter").value;
     const list = document.getElementById("ticketList");
 
@@ -89,48 +96,45 @@ function filter()
 
     let visibleCount = 0;
 
-    for(let i = 0; i < tickets.length; i++)
-    {
-        if(value_filter === "all" || tickets[i].status === value_filter)
-        {
-            let li = document.createElement("li");
-
-            let p1 = document.createElement("p");
-            p1.textContent = "Id: " + tickets[i].id;
-
-            let p2 = document.createElement("p");
-            p2.textContent = "Title: " + tickets[i].title;
-
-            let p3 = document.createElement("p");
-            p3.textContent = "Status: " + tickets[i].status;
-
-            let p4 = document.createElement("p");
-            p4.textContent = "Priority: " + tickets[i].priority;
-
-            li.appendChild(p1);
-            li.appendChild(p2);
-            li.appendChild(p3);
-            li.appendChild(p4);
-
-            list.appendChild(li);
-
+    for (let i = 0; i < tickets.length; i++) {
+        if (value_filter === "all" || tickets[i].status === value_filter) {
+            const ticketRow = createTicketRow(tickets[i]);
+            list.appendChild(ticketRow);
             visibleCount++;
         }
+    }
+
+    if (visibleCount === 0) {
+        const emptyLi = document.createElement("li");
+        emptyLi.textContent = "Brak zgłoszeń do wyświetlenia.";
+        emptyLi.style.textAlign = "center";
+        emptyLi.style.fontStyle = "italic";
+        list.appendChild(emptyLi);
     }
 
     document.getElementById("visibleCount").textContent = visibleCount;
     document.getElementById("totalCount").textContent = tickets.length;
 }
 
-function changeStatus()
-{
-    for(let i = 0; i < tickets.length; i++)
-    {
-        if(document.getElementById("ticketId").value === tickets[i].id)
-        {
-            tickets[i].status=document.getElementById("newStatus").value;
+function changeStatus() {
+    const inputId = document.getElementById("ticketId").value.trim();
+    const newStatus = document.getElementById("newStatus").value;
+    const messageEl = document.getElementById("message");
+
+    let found = false;
+
+    for (let i = 0; i < tickets.length; i++) {
+        if (tickets[i].id === inputId) {
+            tickets[i].status = newStatus;
+            found = true;
             break;
         }
+    }
+
+    if (found) {
+        if (messageEl) messageEl.textContent = "Pomyślnie zmieniono status zgłoszenia " + inputId + ".";
+    } else {
+        if (messageEl) messageEl.textContent = "Nie znaleziono zgłoszenia o podanym ID.";
     }
 
     filter();
