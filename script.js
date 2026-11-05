@@ -121,3 +121,17 @@ function filter()
     document.getElementById("visibleCount").textContent = visibleCount;
     document.getElementById("totalCount").textContent = tickets.length;
 }
+
+function changeStatus()
+{
+    for(let i = 0; i < tickets.length; i++)
+    {
+        if(document.getElementById("ticketId").value === tickets[i].id)
+        {
+            tickets[i].status=document.getElementById("newStatus").value;
+            break;
+        }
+    }
+
+    filter();
+}
