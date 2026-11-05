@@ -15,6 +15,7 @@ function dataSanitization(id, title, status, priority){
     if(id===null || id>10**99){
         return false;
     } else if(title.length<3 || title.length>80){
+        document.getElementById("message").textContent = "Tytuł musi mieć przynajmniej 3 litery";
         return false;
     } else if(status!=='new' && status!=='doing' && status!=='done'){
         return false;
@@ -119,4 +120,18 @@ function filter()
 
     document.getElementById("visibleCount").textContent = visibleCount;
     document.getElementById("totalCount").textContent = tickets.length;
+}
+
+function changeStatus()
+{
+    for(let i = 0; i < tickets.length; i++)
+    {
+        if(document.getElementById("ticketId").value === tickets[i].id)
+        {
+            tickets[i].status=document.getElementById("newStatus").value;
+            break;
+        }
+    }
+
+    filter();
 }
