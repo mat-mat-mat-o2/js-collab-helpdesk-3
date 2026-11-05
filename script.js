@@ -1,10 +1,11 @@
 let ticketCounter=0;
 
-const tickety = [];
+const tickets = [];
 
 document.getElementById("ticketForm").addEventListener("submit", function(event) {
     event.preventDefault();
     addTicket();
+    readTicketData();
 });
 
 function dataSanitization(id, title, status, priority){
@@ -32,20 +33,46 @@ function addTicket()
 
     if(dataSanitization(formData.get('id'), formData.get('title'), formData.get('status'), formData.get('priority'))){
         ticketCounter += 1;
-        console.log(true);
-        tickety.push({id: formData.get('id'), title: formData.get('title'), status: formData.get('status'), priority: formData.get('priority')});
-        console.log(tickety[0].status);
+        tickets.push({id: formData.get('id'), title: formData.get('title'), status: formData.get('status'), priority: formData.get('priority')});
     }
     
 }
 
 function readTicketData()
 {
-    
-}
+    const lista=document.getElementById("ticketList");
 
-function filter()
-{
-    const value_filter = document.getElementById('statusFilter').value;
-    console.log(value_filter);
+    while(lista.firstChild)
+    {
+        lista.removeChild(lista.firstChild);
+    }
+
+    for(var i=0; i<tickets.length; i++)
+    {
+        var div1 = document.createElement("div");
+        var li1 = document.createElement("li");
+        var para1 = document.createElement("p");
+        var node1 = document.createTextNode("Id: "+tickets[i].id);
+        var para2 = document.createElement("p");
+        var node2 = document.createTextNode("Title: "+tickets[i].title);
+        var para3 = document.createElement("p");
+        var node3 = document.createTextNode("Status: "+tickets[i].status);
+        var para4 = document.createElement("p");
+        var node4 = document.createTextNode("Priority: "+tickets[i].priority);
+
+        para1.appendChild(node1);
+        para2.appendChild(node2);
+        para3.appendChild(node3);
+        para4.appendChild(node4);
+
+        div1.appendChild(para1);
+        div1.appendChild(para2);
+        div1.appendChild(para3);
+        div1.appendChild(para4);
+
+        li1.appendChild(div1);
+
+        
+        lista.appendChild(li1);
+    }
 }
