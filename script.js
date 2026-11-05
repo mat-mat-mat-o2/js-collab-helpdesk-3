@@ -43,3 +43,9 @@ function readTicketData()
 {
     
 }
+
+function filter()
+{
+    const value_filter = document.getElementById('statusFilter').value;
+    console.log(value_filter);
+}
