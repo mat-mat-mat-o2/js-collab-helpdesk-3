@@ -41,5 +41,5 @@ function addTicket()
 
 function readTicketData()
 {
-
+    
 }
