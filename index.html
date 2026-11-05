@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Helpdesk</title>
     <link rel="stylesheet" href="styl.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
 
     <h1>Helpdesk</h1>
 
-    <form id="ticketForm">
+    <form id="ticketForm" onsubmit="addTicket()">
 
         <label for="title">Problem:</label>
         <input type="text" id="title" name="title">
@@ -67,10 +68,6 @@
     <h2>Tickets</h2>
     <ul id="ticketList">
     </ul>
-
-    <script>
-        // tutaj JS
-    </script>
 
 </body>
 </html>
