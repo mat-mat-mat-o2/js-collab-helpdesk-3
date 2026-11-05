@@ -13,6 +13,7 @@ function dataSanitization(id, title, status, priority){
     if(id===null || id>10**99){
         return false;
     } else if(title.length<3 || title.length>80){
+        document.getElementById("message").textContent = "Tytuł musi mieć przynajmniej 3 litery";
         return false;
     } else if(status!=='new' && status!=='doing' && status!=='done'){
         return false;
