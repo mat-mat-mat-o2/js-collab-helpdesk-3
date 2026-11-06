@@ -33,31 +33,31 @@ function createTicketRow(ticket) {
 }
 
 function dataSanitization(id, title, status, priority) {
-    const messageEl = document.getElementById("message");
+    const messageEl = document.getElementById("message_add");
     
     if (tickets.length >= 1000) {
-        if (messageEl) messageEl.textContent = "Osiągnięto maksymalny limit 1000 zgłoszeń.";
+        if (messageEl) messageEl.textContent = "The maximum limit of 1000 tickets has been reached.";
         return false;
     }
 
     if (!id || typeof id !== "string" || id.trim().length === 0 || id.length > 100) {
-        if (messageEl) messageEl.textContent = "Nieprawidłowe ID zgłoszenia.";
+        if (messageEl) messageEl.textContent = "Invalid ticket ID.";
         return false;
     }
 
     const trimmedTitle = title ? title.trim() : "";
     if (trimmedTitle.length < 3 || trimmedTitle.length > 80) {
-        if (messageEl) messageEl.textContent = "Tytuł musi mieć od 3 do 80 znaków po przycięciu spacji.";
+        if (messageEl) messageEl.textContent = "The title must be between 3 and 80 characters long.";
         return false;
     }
 
     if (status !== 'new' && status !== 'doing' && status !== 'done') {
-        if (messageEl) messageEl.textContent = "Nieprawidłowy status.";
+        if (messageEl) messageEl.textContent = "Invalid ticket status.";
         return false;
     }
 
     if (priority !== 'low' && priority !== 'normal' && priority !== 'high') {
-        if (messageEl) messageEl.textContent = "Nieprawidłowy priorytet.";
+        if (messageEl) messageEl.textContent = "Invalid ticket priority.";
         return false;
     }
 
@@ -106,7 +106,7 @@ function filter() {
 
     if (visibleCount === 0) {
         const emptyLi = document.createElement("li");
-        emptyLi.textContent = "Brak zgłoszeń do wyświetlenia.";
+        emptyLi.textContent = "No tickets to display.";
         emptyLi.style.textAlign = "center";
         emptyLi.style.fontStyle = "italic";
         list.appendChild(emptyLi);
@@ -116,26 +116,35 @@ function filter() {
     document.getElementById("totalCount").textContent = tickets.length;
 }
 
-function changeStatus() {
-    const inputId = document.getElementById("ticketId").value.trim();
-    const newStatus = document.getElementById("newStatus").value;
-    const messageEl = document.getElementById("message");
+function changeStatus() 
+{
+    let ticketId = document.getElementById("ticketId").value;
+    let newStatus = document.getElementById("newStatus").value;
+
+    if (ticketId.trim() === "" || isNaN(ticketId)) 
+    {
+        document.getElementById("message_change").textContent = "Ticket ID must be a number.";
+        return;
+    }
 
     let found = false;
 
-    for (let i = 0; i < tickets.length; i++) {
-        if (tickets[i].id === inputId) {
+    for (let i = 0; i < tickets.length; i++) 
+    {
+        if (Number(ticketId) === Number(tickets[i].id)) 
+        {
             tickets[i].status = newStatus;
             found = true;
             break;
         }
     }
 
-    if (found) {
-        if (messageEl) messageEl.textContent = "Pomyślnie zmieniono status zgłoszenia " + inputId + ".";
-    } else {
-        if (messageEl) messageEl.textContent = "Nie znaleziono zgłoszenia o podanym ID.";
+    if (!found)
+    {
+        document.getElementById("message_change").textContent = "No ticket found with this ID.";
+        return;
     }
 
+    document.getElementById("message_change").textContent = "Ticket status updated successfully.";
     filter();
 }
