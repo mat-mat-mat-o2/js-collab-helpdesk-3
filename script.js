@@ -36,32 +36,44 @@ function dataSanitization(id, title, status, priority) {
     const messageEl = document.getElementById("message");
     
     if (tickets.length >= 1000) {
-        if (messageEl) messageEl.textContent = "Osiągnięto maksymalny limit 1000 zgłoszeń.";
+        if (messageEl) {
+            messageEl.textContent = "Reached limit of 1000 tickets";
+        }
         return false;
     }
 
     if (!id || typeof id !== "string" || id.trim().length === 0 || id.length > 100) {
-        if (messageEl) messageEl.textContent = "Nieprawidłowe ID zgłoszenia.";
+        if (messageEl) {
+            messageEl.textContent = "Invalid ticket ID";
+        }
         return false;
     }
 
     const trimmedTitle = title ? title.trim() : "";
     if (trimmedTitle.length < 3 || trimmedTitle.length > 80) {
-        if (messageEl) messageEl.textContent = "Tytuł musi mieć od 3 do 80 znaków po przycięciu spacji.";
+        if (messageEl) {
+            messageEl.textContent = "Title must be between 3 and 80 characters long (spaces at the begin/end doesn't count)";
+        } 
         return false;
     }
 
     if (status !== 'new' && status !== 'doing' && status !== 'done') {
-        if (messageEl) messageEl.textContent = "Nieprawidłowy status.";
+        if (messageEl) {
+            messageEl.textContent = "Invalid status";
+        }
         return false;
     }
 
     if (priority !== 'low' && priority !== 'normal' && priority !== 'high') {
-        if (messageEl) messageEl.textContent = "Nieprawidłowy priorytet.";
+        if (messageEl) {
+            messageEl.textContent = "Invalid priority";
+        }
         return false;
     }
 
-    if (messageEl) messageEl.textContent = "";
+    if (messageEl) {
+        messageEl.textContent = "";
+    }
     return true;
 }
 
@@ -132,9 +144,13 @@ function changeStatus() {
     }
 
     if (found) {
-        if (messageEl) messageEl.textContent = "Pomyślnie zmieniono status zgłoszenia " + inputId + ".";
+        if (messageEl) {
+            messageEl.textContent = "Status changed successfully " + inputId;
+        }
     } else {
-        if (messageEl) messageEl.textContent = "Nie znaleziono zgłoszenia o podanym ID.";
+        if (messageEl) {
+            messageEl.textContent = "Ticket with given ID not found";
+        }
     }
 
     filter();
