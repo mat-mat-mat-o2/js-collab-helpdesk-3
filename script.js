@@ -15,7 +15,7 @@ function dataSanitization(id, title, status, priority){
     if(id===null || id>10**99){
         return false;
     } else if(title.length<3 || title.length>80){
-        document.getElementById("message").textContent = "Tytuł musi mieć przynajmniej 3 litery";
+        document.getElementById("message_add").textContent = "The title must be between 3 and 80 characters long!";
         return false;
     } else if(status!=='new' && status!=='doing' && status!=='done'){
         return false;
@@ -122,16 +122,35 @@ function filter()
     document.getElementById("totalCount").textContent = tickets.length;
 }
 
-function changeStatus()
+function changeStatus() 
 {
-    for(let i = 0; i < tickets.length; i++)
+    let ticketId = document.getElementById("ticketId").value;
+    let newStatus = document.getElementById("newStatus").value;
+
+    if (ticketId.trim() === "" || isNaN(ticketId)) 
     {
-        if(document.getElementById("ticketId").value === tickets[i].id)
+        document.getElementById("message_change").textContent = "Id must be a number!";
+        return;
+    }
+
+    let found = false;
+
+    for (let i = 0; i < tickets.length; i++) 
+    {
+        if (Number(ticketId) === Number(tickets[i].id)) 
         {
-            tickets[i].status=document.getElementById("newStatus").value;
+            tickets[i].status = newStatus;
+            found = true;
             break;
         }
     }
 
+    if (!found)
+    {
+        document.getElementById("message_change").textContent = "No ticket found with this ID!";
+        return;
+    }
+
+    document.getElementById("message_change").textContent = "Ticket status updated successfully!";
     filter();
 }
