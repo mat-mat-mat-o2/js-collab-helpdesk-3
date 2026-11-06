@@ -36,32 +36,44 @@ function dataSanitization(id, title, status, priority) {
     const messageEl = document.getElementById("message_add");
     
     if (tickets.length >= 1000) {
-        if (messageEl) messageEl.textContent = "The maximum limit of 1000 tickets has been reached.";
+        if (messageEl) {
+            messageEl.textContent = "The maximum limit of 1000 tickets has been reached.";
+        }
         return false;
     }
 
     if (!id || typeof id !== "string" || id.trim().length === 0 || id.length > 100) {
-        if (messageEl) messageEl.textContent = "Invalid ticket ID.";
+        if (messageEl) {
+            messageEl.textContent = "Invalid ticket ID.";
+        }
         return false;
     }
 
     const trimmedTitle = title ? title.trim() : "";
     if (trimmedTitle.length < 3 || trimmedTitle.length > 80) {
-        if (messageEl) messageEl.textContent = "The title must be between 3 and 80 characters long.";
+        if (messageEl) {
+            messageEl.textContent = "The title must be between 3 and 80 characters long.";
+        } 
         return false;
     }
 
     if (status !== 'new' && status !== 'doing' && status !== 'done') {
-        if (messageEl) messageEl.textContent = "Invalid ticket status.";
+        if (messageEl) {
+            messageEl.textContent = "Invalid ticket status.";
+        }
         return false;
     }
 
     if (priority !== 'low' && priority !== 'normal' && priority !== 'high') {
-        if (messageEl) messageEl.textContent = "Invalid ticket priority.";
+        if (messageEl) {
+            messageEl.textContent = "Invalid ticket priority.";
+        }
         return false;
     }
 
-    if (messageEl) messageEl.textContent = "";
+    if (messageEl) {
+        messageEl.textContent = "";
+    }
     return true;
 }
 
